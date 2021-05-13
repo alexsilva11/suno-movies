@@ -4,7 +4,9 @@ export const Nav = styled.nav`
   width: 1920px;
   height: 107px;
 
-  box-shadow: 0px 4px 25px 4px black;
+  box-shadow: 0px 4px 25px 4px rgba(0, 0, 0, 0.3);
+
+  background-color: #212125;
 
   > div {
     width: 1026px;
@@ -13,7 +15,6 @@ export const Nav = styled.nav`
     margin: 0 477px;
 
     display: flex;
-    color: #fff;
 
     #logo,
     #span {

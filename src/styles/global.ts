@@ -1,6 +1,6 @@
-import {createGlobalStyle} from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-export default createGlobalStyle `
+export default createGlobalStyle`
     *{
     margin: 0;
     padding: 0;
@@ -15,5 +15,10 @@ export default createGlobalStyle `
   body, input, button {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
+    color: #eaeaea;
+  }
+
+  .container {
+    width: 1026px;
   }
 `;
