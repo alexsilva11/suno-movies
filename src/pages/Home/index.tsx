@@ -19,6 +19,7 @@ import {
 
 import api from '../../services/api';
 import NavBar from '../../components/NavBar';
+import { useGenres } from '../../hooks/GenresContext';
 
 interface Populars {
   id: number;
@@ -37,15 +38,11 @@ interface Releases {
   vote_average: number;
 }
 
-interface Genres {
-  id: number;
-  name: string;
-}
-
 const Home: React.FC = () => {
   const [releases, setReleases] = useState<Releases[]>([]);
   const [populars, setPopulars] = useState<Populars[]>([]);
-  const [genres, setGenres] = useState<Genres[]>([]);
+
+  const { genres } = useGenres();
 
   const api_key = process.env.REACT_APP_API_TOKEN;
 
@@ -69,15 +66,6 @@ const Home: React.FC = () => {
         },
       })
       .then(res => setPopulars(res.data.results));
-
-    api
-      .get('genre/movie/list', {
-        params: {
-          api_key,
-          language: 'pt-br',
-        },
-      })
-      .then(res => setGenres(res.data.genres));
   }, [api_key]);
 
   return (
@@ -111,7 +99,12 @@ const Home: React.FC = () => {
                       />
                     </Link>
                     <h3>{release.title}</h3>
-                    <p className="genre">Romance, Comédia</p>
+                    <p className="genre">
+                      {genres.map(
+                        genre =>
+                          genre.id === release.genre_ids[0] && genre.name,
+                      )}
+                    </p>
 
                     <p>
                       <MdStar color="#fe3189" /> {release.vote_average}

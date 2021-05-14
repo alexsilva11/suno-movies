@@ -6,6 +6,7 @@ import { FilmInfo, TrailerContainer } from './styles';
 
 import api from '../../services/api';
 import NavBar from '../../components/NavBar';
+import { useGenres } from '../../hooks/GenresContext';
 
 interface MovieParams {
   id: string;
@@ -15,7 +16,9 @@ interface Movie {
   id: number;
   poster_path: string;
   title: string;
-  genre_ids: Array<number>;
+  genres: Array<{
+    id: number;
+  }>;
   overview: string;
   vote_average: number;
 }
@@ -29,6 +32,8 @@ const FilmDetails: React.FC = () => {
 
   const [movie, setMovie] = useState<Movie>();
   const [video, setVideo] = useState<MovieVideo>();
+
+  const { genres } = useGenres();
 
   const api_key = process.env.REACT_APP_API_TOKEN;
 
@@ -71,7 +76,11 @@ const FilmDetails: React.FC = () => {
             <div>
               <h1>{movie.title}</h1>
               <div>
-                <p>Comédia</p>
+                <p>
+                  {genres.map(
+                    genre => genre.id === movie.genres[0].id && genre.name,
+                  )}
+                </p>
                 <p>
                   <MdStar color="#fe3189" size={34} /> {movie.vote_average}
                 </p>
