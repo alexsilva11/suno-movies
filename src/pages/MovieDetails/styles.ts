@@ -27,20 +27,22 @@ export const FilmInfo = styled.div`
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
-      justify-content: space-evenly;
+      justify-content: space-around;
 
       height: 500px;
 
       margin: 0 20px;
       div {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        div {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
 
-        p {
-          font-weight: 300;
-          font-size: 24px;
-          color: #fe3189;
+          p {
+            font-weight: 300;
+            font-size: 24px;
+            color: #fe3189;
+          }
         }
       }
 
@@ -76,13 +78,18 @@ export const TrailerContainer = styled.div`
     align-items: center;
     flex-direction: column;
 
-    button {
+    a {
       background-color: #fe3189;
       border: none;
       border-radius: 4px;
       width: 160px;
       height: 45px;
       margin: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #eaeaea;
     }
   }
 `;

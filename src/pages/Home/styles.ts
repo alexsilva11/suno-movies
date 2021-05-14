@@ -28,18 +28,66 @@ export const CarouselContainer = styled.div`
   border-bottom: 1px solid #fe3189;
 
   div {
+    width: 1026px;
+    height: 450px;
+
     h2 {
       padding: 10px 40px;
     }
-    #carousel {
-      width: 1026px;
 
+    #carousel-controls {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
 
-      .carousel-item {
-        padding: 10px;
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      #carousel {
+        overflow: hidden;
+        scroll-behavior: smooth;
+
+        display: flex;
+
+        .carousel-item {
+          width: 218px;
+          margin: 10px;
+
+          h3 {
+            overflow: hidden;
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+
+          a {
+            position: relative;
+            div {
+              width: 218px;
+              height: 300px;
+              display: none;
+            }
+
+            img {
+              width: 218px;
+              height: 300px;
+            }
+
+            &:hover {
+              div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fe3189;
+                opacity: 0.5;
+                position: absolute;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -115,23 +163,47 @@ export const CatalogItem = styled.div`
 
   margin: 10px 0;
 
-  img {
-    width: 160px;
-    margin: 10px;
+  a {
+    position: relative;
+    div {
+      width: 160px;
+      height: 240px;
+      margin: 10px;
+      display: none;
+    }
+
+    img {
+      width: 160px;
+      margin: 10px;
+    }
+
+    &:hover {
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fe3189;
+        opacity: 0.5;
+        z-index: 100;
+        position: absolute;
+      }
+    }
   }
 
   .film-info {
     margin: 0 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     div {
-      display: flex;
-      align-items: center;
+      div {
+        display: flex;
+        align-items: center;
 
-      svg {
-        margin-right: 10px;
+        svg {
+          margin-right: 10px;
+        }
       }
     }
 

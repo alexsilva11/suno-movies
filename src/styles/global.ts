@@ -10,6 +10,7 @@ export default createGlobalStyle`
 
   body {
       background: #1B1B1F;
+      scroll-behavior: smooth;
   }
 
   body, input, button {
@@ -20,5 +21,9 @@ export default createGlobalStyle`
 
   .container {
     width: 1026px;
+  }
+
+  a {
+    text-decoration: none;
   }
 `;

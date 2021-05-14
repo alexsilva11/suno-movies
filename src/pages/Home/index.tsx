@@ -5,8 +5,10 @@ import {
   MdKeyboardArrowRight,
   MdStar,
   MdKeyboardArrowDown,
+  MdPlayCircleOutline,
 } from 'react-icons/md';
 
+import { Link } from 'react-router-dom';
 import {
   Container,
   CarouselContainer,
@@ -16,8 +18,7 @@ import {
 } from './styles';
 
 import api from '../../services/api';
-
-import filmPoster from '../../assets/film-poster.png';
+import NavBar from '../../components/NavBar';
 
 interface Populars {
   id: number;
@@ -28,13 +29,21 @@ interface Populars {
   vote_average: number;
 }
 
+interface Releases {
+  id: number;
+  poster_path: string;
+  title: string;
+  genre_ids: Array<number>;
+  vote_average: number;
+}
+
 interface Genres {
   id: number;
   name: string;
 }
 
 const Home: React.FC = () => {
-  const [releases, setReleases] = useState([]);
+  const [releases, setReleases] = useState<Releases[]>([]);
   const [populars, setPopulars] = useState<Populars[]>([]);
   const [genres, setGenres] = useState<Genres[]>([]);
 
@@ -49,7 +58,7 @@ const Home: React.FC = () => {
           page: 1,
         },
       })
-      .then(res => setReleases(res.data));
+      .then(res => setReleases(res.data.results));
 
     api
       .get('movie/popular', {
@@ -73,55 +82,56 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <CarouselContainer>
+      <NavBar />
+      <CarouselContainer id="inicio">
         <div>
           <h2>
             <MdLens color="#fe3189" size={15} /> Lançamentos da Semana
           </h2>
-          <div id="carousel">
-            <MdKeyboardArrowLeft size={42} />
-            <div className="carousel-item">
-              <img src={filmPoster} alt="poster" />
-              <h3>Crazy About Her</h3>
-              <p className="genre">Romance, Comédia</p>
+          <div id="carousel-controls">
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('carousel')?.scrollBy(-238, 0);
+              }}
+            >
+              <MdKeyboardArrowLeft size={42} className="left" />
+            </button>
+            <div id="carousel">
+              {releases.map(release => {
+                return (
+                  <div className="carousel-item" key={release.id}>
+                    <Link to={`/movie/${release.id}`}>
+                      <div>
+                        <MdPlayCircleOutline size={42} color="#fff" />
+                      </div>
+                      <img
+                        src={`https://image.tmdb.org/t/p/original${release.poster_path}`}
+                        alt="poster"
+                      />
+                    </Link>
+                    <h3>{release.title}</h3>
+                    <p className="genre">Romance, Comédia</p>
 
-              <p>
-                <MdStar color="#fe3189" /> 8,4
-              </p>
+                    <p>
+                      <MdStar color="#fe3189" /> {release.vote_average}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-            <div className="carousel-item">
-              <img src={filmPoster} alt="poster" />
-              <h3>Crazy About Her</h3>
-              <p className="genre">Romance, Comédia</p>
-
-              <p>
-                <MdStar color="#fe3189" /> 8,4
-              </p>
-            </div>
-            <div className="carousel-item">
-              <img src={filmPoster} alt="poster" />
-              <h3>Crazy About Her</h3>
-              <p className="genre">Romance, Comédia</p>
-
-              <p>
-                <MdStar color="#fe3189" /> 8,4
-              </p>
-            </div>
-            <div className="carousel-item">
-              <img src={filmPoster} alt="poster" />
-              <h3>Crazy About Her</h3>
-              <p className="genre">Romance, Comédia</p>
-
-              <p>
-                <MdStar color="#fe3189" /> 8,4
-              </p>
-            </div>
-
-            <MdKeyboardArrowRight size={42} />
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('carousel')?.scrollBy(238, 0);
+              }}
+            >
+              <MdKeyboardArrowRight size={42} className="right" />
+            </button>
           </div>
         </div>
       </CarouselContainer>
-      <CatalogHeader>
+      <CatalogHeader id="catalogo">
         <div>
           <h3>
             <MdLens color="#fe3189" size={15} /> CATÁLOGO COMPLETO
@@ -146,23 +156,36 @@ const Home: React.FC = () => {
           {populars.map(popular => {
             return (
               <CatalogItem key={popular.id}>
-                <div>
+                <Link to={`/movie/${popular.id}`}>
+                  <div>
+                    <MdPlayCircleOutline size={42} color="#fff" />
+                  </div>
                   <img
                     src={`https://image.tmdb.org/t/p/original${popular.poster_path}`}
                     alt="poster"
                   />
-                </div>
+                </Link>
+
                 <div className="film-info">
-                  <h3>{popular.title}</h3>
-                  <p className="genre">
-                    {genres.map(
-                      genre => genre.id === popular.genre_ids[0] && genre.name,
-                    )}
-                  </p>
-                  <div className="film-ranking">
-                    <MdStar color="#fe3189" size={22} /> {popular.vote_average}
+                  <div>
+                    <h3>{popular.title}</h3>
+                    <p className="genre">
+                      {genres.map(
+                        genre =>
+                          genre.id === popular.genre_ids[0] && genre.name,
+                      )}
+                    </p>
+                    <div className="film-ranking">
+                      <MdStar color="#fe3189" size={22} />{' '}
+                      {popular.vote_average}
+                    </div>
                   </div>
-                  <p className="synopsis">{popular.overview}</p>
+
+                  <p className="synopsis">
+                    {popular.overview === ''
+                      ? `A sinopse deste filme não está disponível no momento`
+                      : popular.overview}
+                  </p>
                 </div>
               </CatalogItem>
             );
