@@ -9,8 +9,6 @@ export const FilmInfo = styled.div`
   align-items: center;
   justify-content: center;
 
-  height: 702px;
-
   .container {
     display: flex;
 
@@ -28,8 +26,6 @@ export const FilmInfo = styled.div`
       flex-direction: column;
       flex-wrap: wrap;
       justify-content: space-around;
-
-      height: 500px;
 
       margin: 0 20px;
       div {
@@ -58,6 +54,36 @@ export const FilmInfo = styled.div`
       }
     }
   }
+
+  @media (min-width: 769px) {
+    .info {
+      height: 500px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-direction: column;
+
+    .container {
+      flex-direction: column;
+
+      div {
+        display: flex;
+        justify-content: center;
+      }
+
+      .info {
+        div {
+          flex-direction: column;
+          margin-bottom: 20px;
+          div {
+            flex-direction: row;
+          }
+        }
+      }
+    }
+  }
 `;
 
 export const TrailerContainer = styled.div`
@@ -78,6 +104,13 @@ export const TrailerContainer = styled.div`
     align-items: center;
     flex-direction: column;
 
+    height: 600px;
+
+    div {
+      width: 100%;
+      height: 100%;
+    }
+
     a {
       background-color: #fe3189;
       border: none;
@@ -90,6 +123,15 @@ export const TrailerContainer = styled.div`
       justify-content: center;
       text-decoration: none;
       color: #eaeaea;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .video-container {
+      div {
+        width: 100%;
+        height: 56%;
+      }
     }
   }
 `;

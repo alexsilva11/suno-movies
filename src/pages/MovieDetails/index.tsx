@@ -98,15 +98,17 @@ const FilmDetails: React.FC = () => {
           <h2>Trailer</h2>
 
           <div className="video-container">
-            <iframe
-              width="1026"
-              height="579"
-              src={`https://www.youtube.com/embed/${video.key}`}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <div>
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${video.key}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
 
             <Link to="/">Voltar</Link>
           </div>
