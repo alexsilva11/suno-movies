@@ -57,7 +57,7 @@ const FilmDetails: React.FC = () => {
       .then(res => setVideo(res.data.results[0]));
   }, [api_key, params.id]);
 
-  if (!movie || !video) {
+  if (!movie) {
     return <p>Carregando...</p>;
   }
 
@@ -99,15 +99,19 @@ const FilmDetails: React.FC = () => {
 
           <div className="video-container">
             <div>
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/${video.key}`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              {!video ? (
+                <p>Nenhum trailer disponivel</p>
+              ) : (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.key}`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
             </div>
 
             <Link to="/">Voltar</Link>

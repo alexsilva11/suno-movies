@@ -24,7 +24,6 @@ export const FilmInfo = styled.div`
     .info {
       display: flex;
       flex-direction: column;
-      flex-wrap: wrap;
       justify-content: space-around;
 
       margin: 0 20px;
