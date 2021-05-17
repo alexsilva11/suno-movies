@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from 'react';
-import { MdSearch, MdStar } from 'react-icons/md';
+import { MdMenu, MdSearch, MdStar } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
 
-import { Nav, Search } from './styles';
+import { MobileMenu, Nav, Search } from './styles';
 
 import api from '../../services/api';
 
@@ -17,6 +17,7 @@ interface Movies {
 
 const NavBar: React.FC = () => {
   const [openSearch, setOpenSearch] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<Movies[]>([]);
 
@@ -30,6 +31,10 @@ const NavBar: React.FC = () => {
     } else {
       setOpenSearch(true);
     }
+  };
+
+  const onOpenMobileMenu = () => {
+    setOpenMobileMenu(!openMobileMenu);
   };
 
   const onSearchMovie = (evt: FormEvent) => {
@@ -50,28 +55,48 @@ const NavBar: React.FC = () => {
     <>
       <Nav>
         <div>
+          <div id="responsive-menu-toggle">
+            <button type="button" onClick={onOpenMobileMenu}>
+              <MdMenu size={40} />
+            </button>
+          </div>
           <div id="logo">
             SUNO <span>MOVIES</span>
           </div>
           <div id="options">
             <ul>
-              <li>
+              <li className="menu-link">
                 <Link to="/">INÍCIO</Link>
               </li>
-              <li>
+              <li className="menu-link">
                 <ScrollLink href="" to="catalogo" smooth duration={500}>
                   CATÁLOGO
                 </ScrollLink>
               </li>
               <li>
                 <button type="button" onClick={() => onOpenSearch()}>
-                  <MdSearch size={20} />
+                  <MdSearch size={40} />
                 </button>
               </li>
             </ul>
           </div>
         </div>
       </Nav>
+      {openMobileMenu && (
+        <MobileMenu>
+          <div>
+            <ul>
+              <Link to="/">
+                <li>INÍCIO</li>
+              </Link>
+              <ScrollLink href="" to="catalogo" smooth duration={500}>
+                <li>CATÁLOGO</li>
+              </ScrollLink>
+            </ul>
+          </div>
+        </MobileMenu>
+      )}
+
       {openSearch && (
         <Search>
           <div className="search-area">

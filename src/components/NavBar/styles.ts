@@ -1,24 +1,32 @@
 import styled, { keyframes } from 'styled-components';
 
 export const Nav = styled.nav`
-  width: 1920px;
+  width: 100%;
   height: 107px;
 
   box-shadow: 0px 4px 25px 4px rgba(0, 0, 0, 0.3);
 
   background-color: #212125;
 
-  > div {
-    width: 1026px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    padding: 34px;
-    margin: 0 477px;
+  > div {
+    width: 55%;
 
     display: flex;
+    justify-content: space-between;
+
+    button {
+      background-color: #212125;
+      border: none;
+      cursor: pointer;
+    }
 
     #logo,
     #span {
-      width: 513px;
+      width: 50%;
     }
 
     #logo {
@@ -45,13 +53,48 @@ export const Nav = styled.nav`
         a {
           color: #eaeaea;
         }
-
-        button {
-          background-color: #212125;
-          border: none;
-          cursor: pointer;
-        }
       }
+    }
+  }
+
+  @media (min-width: 769px) {
+    #responsive-menu-toggle {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    div {
+      width: 100%;
+
+      justify-content: space-around;
+
+      div {
+        width: 50%;
+
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    div {
+      width: 100%;
+
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    #responsive-menu-toggle,
+    #logo,
+    #options {
+      display: flex;
+      justify-content: center;
+    }
+
+    #options .menu-link {
+      display: none;
     }
   }
 `;
@@ -64,6 +107,42 @@ const animation = keyframes`
   to {
     opacity: 1
   }
+`;
+
+export const MobileMenu = styled.nav`
+  @media (max-width: 768px) {
+    height: 100%;
+    width: 100%;
+
+    animation: ${animation} 1s;
+
+    background-color: rgba(0, 0, 0, 0.9);
+
+    position: absolute;
+    top: 110px;
+
+    z-index: 10;
+
+    div {
+      background-color: #212125;
+      width: 100%;
+
+      ul a {
+        text-decoration: none;
+        color: #eaeaea;
+      }
+
+      ul li {
+        list-style: none;
+        width: 100%;
+
+        font-size: 20px;
+        text-align: center;
+
+        padding: 10px;
+      }
+    }
+  } ;
 `;
 
 export const Search = styled.div`
@@ -102,13 +181,18 @@ export const Search = styled.div`
         font-size: 32px;
         padding: 5px;
         margin: 10px;
+
+        box-sizing: border-box;
       }
 
       .results {
         width: 100%;
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
+
+        a {
+          color: #eaeaea;
+        }
 
         .info {
           width: 300px;
@@ -155,6 +239,28 @@ export const Search = styled.div`
               font-size: 16px;
             }
           }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-area {
+      .container {
+        form {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          input {
+            width: 90%;
+            padding: 0;
+          }
+        }
+
+        .results {
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
     }

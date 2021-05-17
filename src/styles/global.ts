@@ -21,6 +21,10 @@ export default createGlobalStyle`
 
   .container {
     width: 1026px;
+
+    @media (max-width: 760px) {
+      width: 100%;
+    }
   }
 
   a {

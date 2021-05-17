@@ -1,6 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import bgImage from '../../assets/carousel-background.png';
+
+interface CatalogItemProps {
+  view: string;
+}
 
 export const Container = styled.div`
   h3 {
@@ -31,8 +35,18 @@ export const CarouselContainer = styled.div`
     width: 1026px;
     height: 450px;
 
+    @media (max-width: 1024px) {
+      width: 100%;
+    }
+
     h2 {
       padding: 10px 40px;
+
+      @media (max-width: 768px) {
+        padding: 0;
+        padding-bottom: 20px;
+        text-align: center;
+      }
     }
 
     #carousel-controls {
@@ -51,6 +65,10 @@ export const CarouselContainer = styled.div`
         scroll-behavior: smooth;
 
         display: flex;
+
+        @media (max-width: 768px) {
+          width: 220px;
+        }
 
         .carousel-item {
           width: 218px;
@@ -107,6 +125,16 @@ export const CatalogHeader = styled.div`
   div {
     width: 1026px;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 `;
 
 export const Catalog = styled.div`
@@ -117,6 +145,10 @@ export const Catalog = styled.div`
 
   margin: 30px 0;
 
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   #buttons,
   #films {
     width: 1026px;
@@ -124,17 +156,42 @@ export const Catalog = styled.div`
   #buttons {
     display: flex;
 
+    select,
     button {
       width: 160px;
       height: 45px;
+
+      font-weight: 600;
+      font-size: 14px;
 
       background: linear-gradient(to bottom, #212125, #2e2e35);
 
       color: #eaeaea;
       border: 2px solid #2e2d31;
       border-radius: 4px;
-      text-align: center;
       margin: 10px;
+    }
+
+    select {
+      text-align: center;
+      text-align-last: center;
+      -moz-text-align-last: center;
+
+      option {
+        background-color: #212125;
+
+        font-weight: 600;
+        font-size: 14px;
+      }
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button.selected {
+      background: #fe3189;
+      border: none;
     }
 
     #filters,
@@ -146,6 +203,21 @@ export const Catalog = styled.div`
       display: flex;
       flex-direction: row-reverse;
     }
+
+    @media (max-width: 768px) {
+      width: 100%;
+
+      #filters {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #list-style {
+        display: none;
+      }
+    }
   }
   #films {
     display: flex;
@@ -153,12 +225,30 @@ export const Catalog = styled.div`
 
     width: 1026px;
     margin-top: 30px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      overflow: hidden;
+    }
   }
 `;
 
-export const CatalogItem = styled.div`
+export const CatalogItem = styled.div<CatalogItemProps>`
   display: flex;
-  width: 513px;
+  ${props =>
+    props.view === 'grid'
+      ? css`
+          width: 513px;
+        `
+      : css`
+          width: 1026px;
+        `}
+
+  @media (max-width: 768px) {
+    width: 100%;
+    overflow: hidden;
+  }
+
   max-height: 240px;
 
   margin: 10px 0;

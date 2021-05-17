@@ -4,7 +4,6 @@ import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
   MdStar,
-  MdKeyboardArrowDown,
   MdPlayCircleOutline,
 } from 'react-icons/md';
 
@@ -21,7 +20,7 @@ import api from '../../services/api';
 import NavBar from '../../components/NavBar';
 import { useGenres } from '../../hooks/GenresContext';
 
-interface Populars {
+interface Movie {
   id: number;
   poster_path: string;
   title: string;
@@ -30,17 +29,12 @@ interface Populars {
   vote_average: number;
 }
 
-interface Releases {
-  id: number;
-  poster_path: string;
-  title: string;
-  genre_ids: Array<number>;
-  vote_average: number;
-}
-
 const Home: React.FC = () => {
-  const [releases, setReleases] = useState<Releases[]>([]);
-  const [populars, setPopulars] = useState<Populars[]>([]);
+  const [releases, setReleases] = useState<Movie[]>([]);
+  const [populars, setPopulars] = useState<Movie[]>([]);
+  const [filter, setFilter] = useState('popular');
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
+  const [viewType, setViewType] = useState('grid');
 
   const { genres } = useGenres();
 
@@ -68,10 +62,28 @@ const Home: React.FC = () => {
       .then(res => setPopulars(res.data.results));
   }, [api_key]);
 
+  const onFilterSelect = (id: string) => {
+    if (id !== 'popular') {
+      const selectedFilter = genres.filter(genre => {
+        return genre.id === parseInt(id, 10);
+      });
+
+      setFilter(selectedFilter[0].name);
+
+      setFilteredMovies(
+        populars.filter(
+          popular => popular.genre_ids[0] === selectedFilter[0].id,
+        ),
+      );
+    } else {
+      setFilter('popular');
+    }
+  };
+
   return (
     <Container>
       <NavBar />
-      <CarouselContainer id="inicio">
+      <CarouselContainer>
         <div>
           <h2>
             <MdLens color="#fe3189" size={15} /> Lançamentos da Semana
@@ -134,55 +146,121 @@ const Home: React.FC = () => {
       <Catalog>
         <div id="buttons">
           <div id="filters">
-            <button type="button">
-              <MdKeyboardArrowDown /> por gênero
-            </button>
-            <button type="button">Mais Populares</button>
+            <select
+              placeholder="por gênero"
+              onChange={evt => {
+                onFilterSelect(evt.target.value);
+              }}
+            >
+              <option disabled selected>
+                por gênero
+              </option>
+              {genres.map(genre => {
+                return (
+                  <option value={genre.id} key={genre.id}>
+                    {genre.name}
+                  </option>
+                );
+              })}
+            </select>
+            {filter === 'popular' ? (
+              <button type="button" className="selected">
+                Mais Populares
+              </button>
+            ) : (
+              <button type="button" onClick={() => onFilterSelect('popular')}>
+                Mais Populares
+              </button>
+            )}
           </div>
           <div id="list-style">
-            <button type="button">
-              <MdKeyboardArrowDown /> em lista
-            </button>
+            {viewType === 'grid' ? (
+              <button type="button" onClick={() => setViewType('lista')}>
+                em lista
+              </button>
+            ) : (
+              <button type="button" onClick={() => setViewType('grid')}>
+                em grid
+              </button>
+            )}
           </div>
         </div>
         <div id="films">
-          {populars.map(popular => {
-            return (
-              <CatalogItem key={popular.id}>
-                <Link to={`/movie/${popular.id}`}>
-                  <div>
-                    <MdPlayCircleOutline size={42} color="#fff" />
-                  </div>
-                  <img
-                    src={`https://image.tmdb.org/t/p/original${popular.poster_path}`}
-                    alt="poster"
-                  />
-                </Link>
+          {filter === 'popular'
+            ? populars.map(popular => {
+                return (
+                  <CatalogItem key={popular.id} view={viewType}>
+                    <Link to={`/movie/${popular.id}`}>
+                      <div>
+                        <MdPlayCircleOutline size={42} color="#fff" />
+                      </div>
+                      <img
+                        src={`https://image.tmdb.org/t/p/original${popular.poster_path}`}
+                        alt="poster"
+                      />
+                    </Link>
 
-                <div className="film-info">
-                  <div>
-                    <h3>{popular.title}</h3>
-                    <p className="genre">
-                      {genres.map(
-                        genre =>
-                          genre.id === popular.genre_ids[0] && genre.name,
-                      )}
-                    </p>
-                    <div className="film-ranking">
-                      <MdStar color="#fe3189" size={22} />{' '}
-                      {popular.vote_average}
+                    <div className="film-info">
+                      <div>
+                        <h3>{popular.title}</h3>
+                        <p className="genre">
+                          {genres.map(
+                            genre =>
+                              genre.id === popular.genre_ids[0] && genre.name,
+                          )}
+                        </p>
+                        <div className="film-ranking">
+                          <MdStar color="#fe3189" size={22} />{' '}
+                          {popular.vote_average}
+                        </div>
+                      </div>
+
+                      <p className="synopsis">
+                        {popular.overview === ''
+                          ? `A sinopse deste filme não está disponível no momento`
+                          : popular.overview}
+                      </p>
                     </div>
-                  </div>
+                  </CatalogItem>
+                );
+              })
+            : filteredMovies.map(movie => {
+                return (
+                  <CatalogItem key={movie.id} view={viewType}>
+                    <Link to={`/movie/${movie.id}`}>
+                      <div>
+                        <MdPlayCircleOutline size={42} color="#fff" />
+                      </div>
+                      <img
+                        src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                        alt="poster"
+                      />
+                    </Link>
 
-                  <p className="synopsis">
-                    {popular.overview === ''
-                      ? `A sinopse deste filme não está disponível no momento`
-                      : popular.overview}
-                  </p>
-                </div>
-              </CatalogItem>
-            );
-          })}
+                    <div className="film-info">
+                      <div>
+                        <h3>{movie.title}</h3>
+                        <p className="genre">
+                          {genres.map(
+                            genre =>
+                              genre.id === movie.genre_ids[0] && genre.name,
+                          )}
+                        </p>
+                        <div className="film-ranking">
+                          <MdStar color="#fe3189" size={22} />{' '}
+                          {movie.vote_average}
+                        </div>
+                      </div>
+
+                      <p className="synopsis">
+                        {movie.overview === ''
+                          ? `A sinopse deste filme não está disponível no momento`
+                          : movie.overview}
+                      </p>
+                    </div>
+                  </CatalogItem>
+                );
+              })}
         </div>
       </Catalog>
     </Container>
